@@ -1,0 +1,5 @@
+{
+    "require": {
+        "denchikby/phalcon-mongodb-odm": "^1.0"
+    }
+}
