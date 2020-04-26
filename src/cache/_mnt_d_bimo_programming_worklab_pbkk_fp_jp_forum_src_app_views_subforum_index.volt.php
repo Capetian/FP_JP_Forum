@@ -12,9 +12,11 @@
     </head>
 
     <body>
+        
         <?php if ($this->session->has('auth')) { ?>
         <?= $this->partial('partials/auth/navbar') ?><?php } else { ?><?= $this->partial('partials/guest/navbar') ?>
-        <?php } ?>
+        <?php } ?> 
+        
          
 <div class="container mt-5">
     <div class="row-center mt-5">
@@ -24,7 +26,7 @@
                     <thead class="thead bg-primary text-white text-justify">
                         <tr>
                             <th scope="col" class="th "><h5>Subforums</h5></th>
-                            <th scope="col"><h6>Threads</h6></th>
+                            <th scope="col"><h6>Replies</h6></th>
                             <th scope="col"><h6>Created</h6></th>
                             <th scope="col"><h6>Last Post</h6></th>
                         </tr>

@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-use Phalcon\Http\Request;
 
 
 class SubforumController extends ControllerBase
@@ -8,7 +7,7 @@ class SubforumController extends ControllerBase
 
     public function indexAction()
     {
-        $subforums = json_decode( Subforums::get()->toJson());
+        $subforums = $this->toJson(Subforums::get());
 
         $this->view->subforums = $subforums;
 
@@ -23,7 +22,7 @@ class SubforumController extends ControllerBase
     public function storeAction()
     {
         $user = Subforums::init();
-        $request = new Request();
+        $request = $this->request;
         $user->fill(
             [
                 'name' => $request->getPost('name'),
@@ -36,12 +35,10 @@ class SubforumController extends ControllerBase
 
     public function showAction($param)
     {
-        $id = new \MongoDB\BSON\ObjectId($param);
-
-        $q = Subforums::where('_id', $id)->first();
+        $q = Subforums::findById($this->toID($param));
         $name = $q->name;
-        $threads = json_decode(Threads::where('subforum_id',$id)->inWhere('status',[0,1])
-        ->orderBy('status', 'desc')->orderBy('updated_at','desc')->get()->toJson());
+        $threads = $this->toJson(Threads::where("title","%", ".")->join('replies')->where('subforum_id',$this->toID($param))->inWhere('pinned',[false,true])
+        ->orderBy('pinned', 'desc')->get());
         $this->view->threads = $threads;
         $this->view->name = $name;
 

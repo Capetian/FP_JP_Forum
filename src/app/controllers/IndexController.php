@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-use Phalcon\Http\Request;
 
 
 class IndexController extends ControllerBase
@@ -8,9 +7,10 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
-        $subforums = json_decode( Subforums::limit(5)->get()->toJson());
-
+        $subforums = $this->toJson(Subforums::join('threads')->limit(5)->get());
+        $threads = $this->toJson(Threads::where("title","%", ".")->join('replies')->orderBy("updated_at","desc")->limit(5)->get());
         $this->view->subforums = $subforums;
+        $this->view->threads = $threads;
 
         $this->view->pick('index/index');
     }
@@ -28,12 +28,12 @@ class IndexController extends ControllerBase
     public function storeAction()
     {
         $user = Users::init();
-        $request = new Request();
+        $request = $this->request;
         $user->fill(
             [
                 'username' => $request->getPost('username'),
-                'email' => $request->getPost('email'),
-                'password' => $request->getPost('password'),
+                'email' => $request->getPost('email',"email"),
+                'password' => $this->security->hash($request->getPost('password',"string")),
             ]
 
         )->save();
@@ -42,13 +42,15 @@ class IndexController extends ControllerBase
 
     public function signinAction()
     {
-        $request = new Request();
-        $username = $request->getPost('em');
-        $user = Users::where('email', $username)->first()->toArray();
-        $pass = $request->getPost('pw');
+
+        $request = $this->request;
+        $email = $request->getPost('em', 'email');
+        $pass = $request->getPost('pw',"string");
+        $user = Users::findFirst(["email"=> $email])->toArray();
+
         if($user)
         {
-            if($user['password'] == $pass){
+            if($this->security->checkHash($pass, $user['password']) === true){
                 $this->session->set('auth',['username' => $user['username'], 'uid' => $user['id']]);
             }
             else{
@@ -70,12 +72,11 @@ class IndexController extends ControllerBase
 
     public function searchAction()
     {
-        $request = new Request();
-        $results =  json_decode(Threads::where("title","%",$request->getPost("search"))->join('user')->get()->toJson());
+        $request = $this->request;
+        $results =  $this->toJson(Threads::where("title","%",$request->getPost("search"))->join('user')->get());;
         $this->view->results = $results;
         $this->view->pick('index/search');
     }
-
 
 }
 

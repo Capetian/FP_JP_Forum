@@ -2,11 +2,12 @@
 
 $router = $di->getRouter();
 
-// $router->add('/', [
 
-//     'controller' => 'Index',
-//     'action' => 'index'
-// ]);
+
+$router->add('/:controller/:action', array(
+    'controller' => 1,
+    'action' => 'index'
+));
 
 $router->add('/:controller/:action', array(
     'controller' => 1,

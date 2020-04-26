@@ -18,4 +18,14 @@ class ControllerBase extends Controller
         $this->tag->setTitle('JP FORUM');
         $this->tag->setDoctype(Phalcon\Tag::HTML5);
     }
+
+    public function toJson($var)
+    {
+        return json_decode($var->toJson());
+    }
+
+    public function toID($id)
+    {
+        return new \MongoDB\BSON\ObjectId($id); 
+    }
 }

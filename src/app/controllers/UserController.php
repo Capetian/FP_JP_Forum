@@ -1,14 +1,12 @@
 <?php
 declare(strict_types=1);
-use Phalcon\Http\Request;
 
 
 class UserController extends ControllerBase
 {
     public function showAction($uid)
     {
-        $uidM = new \MongoDB\BSON\ObjectId($uid);
-        $user = Users::where("_id", $uidM)->first();
+        $user = Users::where("_id", $this->toID($uid))->first();
         $this->view->user = $user;
         $this->view->pick("user/show");
     }
@@ -16,15 +14,20 @@ class UserController extends ControllerBase
 
     public function editAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $changes = [];
         $uid = $request->getPost("uid");
-        $uidM = new \MongoDB\BSON\ObjectId($uid);
-        $em = $request->getPost("email");
-        if ( isset($em) ) {
+
+        $em = $request->getPost("email", "email" );
+        $pw = $request->getPost("password", "string");
+        $confirm = $request->getPost("confirm", "string");
+        if ( $em !== "" ) {
             $changes['email'] = $em;
         }
-        $user = Users::where("_id",$uidM)->update($changes);
+        if ( $pw !== "" && ($pw == $confirm) ) {
+            $changes['password'] = $this->security->hash($pw);
+        }
+        $user = Users::where("_id",$this->toID($uid))->update($changes);
         $this->response->redirect("/user/show/".$uid);
 
     }

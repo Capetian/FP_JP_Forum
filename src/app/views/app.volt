@@ -12,11 +12,13 @@
     </head>
 
     <body>
+        {% block navbar %}
         {% if session.has('auth')%}
         {{ partial( 'partials/auth/navbar') }}
         {%- else -%}
         {{ partial( 'partials/guest/navbar')}}
-        {% endif %}
+        {% endif %} 
+        {% endblock %}
         {% block content %} {% endblock %}
         {% include 'partials/footer.volt' %}
 

@@ -15,35 +15,49 @@
                         <h5> By {{root.user.username}} </h5>
                     </div>
                     <div class="row ">
+                        {% if rt.locked == true %}
+                        {% set lock = false %}
+                        {% set sLock = "Unlock" %}
+                        {% else %}
+                        {% set lock = true %}
+                        {% set sLock = "Lock" %}
+                        {% endif %}
+
+                        {% if rt.pinned == true %}
+                        {% set pin = false %}
+                        {% set sPin = "Unpin" %}
+                        {% else %}
+                        {% set pin = true %}
+                        {% set sPin = "Pin" %}
+                        {% endif %}
                         <form class="form-inline" action="{{url('/thread/lock/')}}" method="POST">
+                            <input type="hidden" name="l_val" value="{{lock}}">
                             <input type="hidden" name="l_id" value="{{rt.id}}">
-                            <button class="btn btn-link text-info my-2 my-sm-0" type="submit"><h6>Lock</h6></button>
-                            
+                            <button class="btn btn-link text-info my-2 my-sm-0" type="submit"><h6>{{ sLock }}</h6></button>
                         </form> <h5>|</h5>
                         <form class="form-inline" action="{{url('/thread/delete/')}}" method="POST">
                             <input type="hidden" name="d_id" value="{{rt.id}}">
                             <button class="btn btn-link text-danger my-2 my-sm-0" type="submit"><h6>Delete</h6></button>
                         </form> <h5>|</h5>
                         <form class="form-inline" action="{{url('/thread/pin/')}}" method="POST">
+                            <input type="hidden" name="p_val" value="{{pin}}">
                             <input type="hidden" name="p_id" value="{{rt.id}}">
-                            <button class="btn btn-link my-2 text-success my-sm-0" type="submit"><h6>Pin</h6></button>
+                            <button class="btn btn-link my-2 text-success my-sm-0" type="submit"><h6>{{sPin}}</h6></button>
                         </form>
                     </div>
                 </div>
                 <div class="col-4 align-self-center">
                     <div class="row">
-                        <h6>Created at: {{root.created_at}}</h6>
+                        <h6>Created at: {{date("j-M-y",rt.created_at)}}</h6>
                     </div>
                     <div class="row">
-                        <h6>Last Reply: {{root.updated_at}}</h6>
+                        <h6>Last Reply: {{ date("j-M-y",rt.updated_at)}}</h6>
                     </div>
                 </div>
             </div>
             <table class="table border-top border-bottom">
                 <tbody class="th text-center">
                     {% for reply in replies %}
-                        {% set rep = reply| json_decode %}
-                        {% set usr = reply.user| json_decode %}
                     <tr>
                         <th>
                             <div class="row text-justify">
@@ -52,7 +66,7 @@
                                     picture
                                     </div>
                                     <div class="row text-center" >
-                                        <h6  style="word-wrap:break-word;width:50px;"> {{reply.user.username}}</h6>
+                                        <a href="{{url('/user/show/') ~ reply.user.id}}"><h6  style="word-wrap:break-word;width:50px;"> {{reply.user.username}}</h6></a>
                                     </div>
                                 </div>
                                 <div class="col-9">
@@ -60,24 +74,23 @@
                                 </div>
                                 <div class="col-2">
                                     <div class="row">
-                                        {% if  session.get('auth')['uid'] == usr.id  %}
-                                        <form class="form-inline" action="{{url('/thread/edit') }}"method="POST">
-                                            <input type="hidden" name="e_id" value="{{rep.id}}">
-                                            <button class="btn btn-link my-2 my-sm-0" type="submit"><h6>Edit</h6></button>
-                                        </form>
+                                        {% if  session.get('auth')['uid'] == reply.user.id  %}
+                                            <button class="btn btn-link my-2 my-sm-0" ><h6>Edit</h6></button>
                                         <h5>|</h5>
-                                        {% endif %}
                                         <form class="form-inline" action="{{url('/thread/hide') }}" method="POST">
-                                            <input type="hidden" name="h_id" value="{{rep.id}}">
+                                            <input type="hidden" name="h_id" value="{{reply.id}}">
                                             <button class="btn btn-link text-danger my-2 my-sm-0" type="submit"><h6>Delete</h6></button>
                                         </form>
+                                        {% endif %}
                                     </div>
                                     <div class="row">
-                                        <h6>Created at: {{reply.created_at}}</h6>
+                                        <h6>Posted at: {{date("j-M-y",reply.created_at)}}</h6>
                                     </div>
+                                    {% if reply.updated_at != reply.created_at %}
                                     <div class="row">
-                                        <h6>Edited at: {{reply.updated_at}}</h6>
+                                        <h6>Edited at: {{date("j-M-y",reply.updated_at)}}</h6>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </th>
@@ -85,7 +98,7 @@
                     {% endfor  %}
                 </tbody>
             </table>
-            {% if rt.locked == 0 %}
+            {% if root.locked == 0 and session.get('auth')['uid'] is defined  %} 
             <div class="row">
                 <div class="col">
                     <div class="h4 mb-3">Reply to Thread</div>

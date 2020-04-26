@@ -12,9 +12,11 @@
     </head>
 
     <body>
+        
         <?php if ($this->session->has('auth')) { ?>
         <?= $this->partial('partials/auth/navbar') ?><?php } else { ?><?= $this->partial('partials/guest/navbar') ?>
-        <?php } ?>
+        <?php } ?> 
+        
          
 <div class="container mt-5">
     <div class="row-center mt-5">

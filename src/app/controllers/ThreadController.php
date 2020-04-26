@@ -1,35 +1,33 @@
 <?php
 declare(strict_types=1);
-use Phalcon\Http\Request;
-use Phalcon\Mvc\View;
+
 class ThreadController extends ControllerBase
 {
 
     public function createAction()
     {
-        $subforums = json_decode(Subforums::get()->toJson());
-        $this->view->subforums = $subforums;
-        $this->view->pick('thread/create');  
-    }
-
-    private function toID($id)
-    {
-        $res = new \MongoDB\BSON\ObjectId($id);
-        return $res; 
+        if (isset($this->session->auth['uid'])) {
+            $subforums = $this->toJson(Subforums::get());
+            $this->view->subforums = $subforums;
+            $this->view->pick('thread/create');  
+        }
+        else {
+            $this->response->redirect('/');
+        }
     }
     
     public function storeAction()
     {
         $thread = Threads::init();
-        $request = new Request();
+        $request = $this->request;
 
         $root = $thread->fill(
             [
                 'title' => $request->getPost('title'),
-                'subforum_id' => $this->toID( $request->getPost('sid')),
-                'user_id' => $this->toID($request->getPost('uid')),
-                'status' => 0,
-                'locked'=> 0,
+                'subforum_id' => $request->getPost('sid'),
+                'user_id' => $request->getPost('uid'),
+                'pinned' => false,
+                'locked'=> false,
             ]
 
         )->save()->toArray();
@@ -44,10 +42,10 @@ class ThreadController extends ControllerBase
         $thread->fill(
             [
                 'content' => $content,
-                'root' => $this->toID($id),
-                'subforum_id' => $this->toID($sid),
-                'user_id' => $this->toID($uid),
-                'deleted' => 0,
+                'root' => $id,
+                'subforum_id' => $sid,
+                'user_id' => $uid,
+                'deleted' => false,
             ]
 
         )->save();
@@ -56,15 +54,15 @@ class ThreadController extends ControllerBase
 
     public function replyAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $this->reply($request->getPost('r_id'),$request->getPost('r_uid'),$request->getPost('r_sid'), $request->getPost('content'));
     }
 
     public function showAction($param)
     {
-        $root = Threads::where('_id', $this->toID($param))->first();
-        $root->user;
-        $replies = Threads::join('user')->where('root', $this->toID($param))->get();
+        $id = $this->toID($param);
+        $root = Threads::findById($id);
+        $replies = $this->toJson(Threads::join('user')->where('root',$id )->get());
 
         $this->view->replies = $replies;
         $this->view->root = $root;
@@ -74,16 +72,16 @@ class ThreadController extends ControllerBase
 
     public function hideAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $hid = $request->getPost("h_id");
-        $post = Threads::where("_id", $this->toID($hid))->update(["deleted" => 1]);
+        $post = Threads::where("_id", $this->toID($hid))->update(["deleted" => true]);
         $id = strval($post->root);
         $this->response->redirect("/thread/show/".$id);
     }
 
     public function deleteAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $id = $this->toID($request->getPost("d_id")) ;
         $posts = Threads::where("_id", $id)->orWhere("root",$id)->delete();
         $this->response->redirect("/subforum/index");
@@ -91,25 +89,27 @@ class ThreadController extends ControllerBase
 
     public function lockAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $id = $request->getPost("l_id");
-        $post = Threads::where("_id", $this->toID($id))->update(["locked" => 1]);
+        $val = $request->getPost("l_val","bool");
+        $post = Threads::where("_id", $this->toID($id))->update(["locked" => $val]);
         $this->response->redirect("/thread/show/".$id);
     }
 
 
     public function pinAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $id = $request->getPost("p_id");
-        $post = Threads::where("_id", $this->toID($id) )->update(["status" => 1]);
+        $val = $request->getPost("p_val","bool");
+        $post = Threads::where("_id", $this->toID($id) )->update(["pinned" => $val]);
         $this->response->redirect("/thread/show/".$id);
     }
 
 
     public function editAction()
     {
-        $request = new Request();
+        $request = $this->request;
         $changes = [];
         $content = $request->getPost("e_content");
         $eid = $request->getPost("e_id");

@@ -1,4 +1,4 @@
-a:3:{i:0;s:647:"<?= $this->tag->getDoctype() ?>
+a:5:{i:0;s:459:"<?= $this->tag->getDoctype() ?>
 <html>
 
     <head>
@@ -12,10 +12,12 @@ a:3:{i:0;s:647:"<?= $this->tag->getDoctype() ?>
     </head>
 
     <body>
-        <?php if ($this->session->has('auth')) { ?>
-        <?= $this->partial('partials/auth/navbar') ?><?php } else { ?><?= $this->partial('partials/guest/navbar') ?>
-        <?php } ?>
-        ";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:1:" ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:20;}}i:1;s:260:"
+        ";s:6:"navbar";a:3:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:9:"
+        ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}i:1;a:6:{s:4:"type";i:300;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:5:{s:4:"type";i:46;s:4:"left";a:4:{s:4:"type";i:265;s:5:"value";s:7:"session";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}s:5:"right";a:4:{s:4:"type";i:265;s:5:"value";s:3:"has";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:4:"auth";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:16;}s:15:"true_statements";a:2:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:9:"
+        ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:17;}i:1;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:7:"partial";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:17;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:20:"partials/auth/navbar";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:17;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:17;}}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:17;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:18;}}s:16:"false_statements";a:2:{i:0;a:4:{s:4:"type";i:359;s:4:"expr";a:5:{s:4:"type";i:350;s:4:"name";a:4:{s:4:"type";i:265;s:5:"value";s:7:"partial";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:19;}s:9:"arguments";a:1:{i:0;a:3:{s:4:"expr";a:4:{s:4:"type";i:260;s:5:"value";s:21:"partials/guest/navbar";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:19;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:19;}}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:19;}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:20;}i:1;a:4:{s:4:"type";i:357;s:5:"value";s:9:"
+        ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:20;}}s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:21;}i:2;a:4:{s:4:"type";i:357;s:5:"value";s:10:" 
+        ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:21;}}i:1;s:9:"
+        ";s:7:"content";a:1:{i:0;a:4:{s:4:"type";i:357;s:5:"value";s:1:" ";s:4:"file";s:71:"/mnt/d/BIMO/Programming/worklab/pbkk/FP_JP_Forum/src/app/views/app.volt";s:4:"line";i:22;}}i:2;s:260:"
         
 
 

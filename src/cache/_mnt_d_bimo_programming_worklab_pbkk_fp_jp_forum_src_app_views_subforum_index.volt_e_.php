@@ -1,4 +1,4 @@
-a:3:{i:0;s:647:"<?= $this->tag->getDoctype() ?>
+a:5:{i:0;s:459:"<?= $this->tag->getDoctype() ?>
 <html>
 
     <head>
@@ -12,9 +12,11 @@ a:3:{i:0;s:647:"<?= $this->tag->getDoctype() ?>
     </head>
 
     <body>
+        ";s:6:"navbar";s:198:"
         <?php if ($this->session->has('auth')) { ?>
         <?= $this->partial('partials/auth/navbar') ?><?php } else { ?><?= $this->partial('partials/guest/navbar') ?>
-        <?php } ?>
+        <?php } ?> 
+        ";i:1;s:9:"
         ";s:7:"content";s:1599:" 
 <div class="container mt-5">
     <div class="row-center mt-5">
@@ -49,7 +51,7 @@ a:3:{i:0;s:647:"<?= $this->tag->getDoctype() ?>
         </div>
     </div>
 </div>
-";i:1;s:260:"
+";i:2;s:260:"
         
 
 

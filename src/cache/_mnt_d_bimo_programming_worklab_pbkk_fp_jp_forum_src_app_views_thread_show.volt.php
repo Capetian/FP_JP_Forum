@@ -12,9 +12,11 @@
     </head>
 
     <body>
+        
         <?php if ($this->session->has('auth')) { ?>
         <?= $this->partial('partials/auth/navbar') ?><?php } else { ?><?= $this->partial('partials/guest/navbar') ?>
-        <?php } ?>
+        <?php } ?> 
+        
          
 <?php $rt = json_decode($root); ?>
 <?php $sb = json_decode($root->subforum); ?>
@@ -30,35 +32,49 @@
                         <h5> By <?= $root->user->username ?> </h5>
                     </div>
                     <div class="row ">
+                        <?php if ($rt->locked == true) { ?>
+                        <?php $lock = false; ?>
+                        <?php $sLock = 'Unlock'; ?>
+                        <?php } else { ?>
+                        <?php $lock = true; ?>
+                        <?php $sLock = 'Lock'; ?>
+                        <?php } ?>
+
+                        <?php if ($rt->pinned == true) { ?>
+                        <?php $pin = false; ?>
+                        <?php $sPin = 'Unpin'; ?>
+                        <?php } else { ?>
+                        <?php $pin = true; ?>
+                        <?php $sPin = 'Pin'; ?>
+                        <?php } ?>
                         <form class="form-inline" action="<?= $this->url->get('/thread/lock/') ?>" method="POST">
+                            <input type="hidden" name="l_val" value="<?= $lock ?>">
                             <input type="hidden" name="l_id" value="<?= $rt->id ?>">
-                            <button class="btn btn-link text-info my-2 my-sm-0" type="submit"><h6>Lock</h6></button>
-                            
+                            <button class="btn btn-link text-info my-2 my-sm-0" type="submit"><h6><?= $sLock ?></h6></button>
                         </form> <h5>|</h5>
                         <form class="form-inline" action="<?= $this->url->get('/thread/delete/') ?>" method="POST">
                             <input type="hidden" name="d_id" value="<?= $rt->id ?>">
                             <button class="btn btn-link text-danger my-2 my-sm-0" type="submit"><h6>Delete</h6></button>
                         </form> <h5>|</h5>
                         <form class="form-inline" action="<?= $this->url->get('/thread/pin/') ?>" method="POST">
+                            <input type="hidden" name="p_val" value="<?= $pin ?>">
                             <input type="hidden" name="p_id" value="<?= $rt->id ?>">
-                            <button class="btn btn-link my-2 text-success my-sm-0" type="submit"><h6>Pin</h6></button>
+                            <button class="btn btn-link my-2 text-success my-sm-0" type="submit"><h6><?= $sPin ?></h6></button>
                         </form>
                     </div>
                 </div>
                 <div class="col-4 align-self-center">
                     <div class="row">
-                        <h6>Created at: <?= $root->created_at ?></h6>
+                        <h6>Created at: <?= date('j-M-y', $rt->created_at) ?></h6>
                     </div>
                     <div class="row">
-                        <h6>Last Reply: <?= $root->updated_at ?></h6>
+                        <h6>Last Reply: <?= date('j-M-y', $rt->updated_at) ?></h6>
                     </div>
                 </div>
             </div>
             <table class="table border-top border-bottom">
                 <tbody class="th text-center">
                     <?php foreach ($replies as $reply) { ?>
-                        <?php $rep = json_decode($reply); ?>
-                        <?php $usr = json_decode($reply->user); ?>
                     <tr>
                         <th>
                             <div class="row text-justify">
@@ -67,7 +83,7 @@
                                     picture
                                     </div>
                                     <div class="row text-center" >
-                                        <h6  style="word-wrap:break-word;width:50px;"> <?= $reply->user->username ?></h6>
+                                        <a href="<?= $this->url->get('/user/show/') . $reply->user->id ?>"><h6  style="word-wrap:break-word;width:50px;"> <?= $reply->user->username ?></h6></a>
                                     </div>
                                 </div>
                                 <div class="col-9">
@@ -75,24 +91,23 @@
                                 </div>
                                 <div class="col-2">
                                     <div class="row">
-                                        <?php if ($this->session->get('auth')['uid'] == $usr->id) { ?>
-                                        <form class="form-inline" action="<?= $this->url->get('/thread/edit') ?>"method="POST">
-                                            <input type="hidden" name="e_id" value="<?= $rep->id ?>">
-                                            <button class="btn btn-link my-2 my-sm-0" type="submit"><h6>Edit</h6></button>
-                                        </form>
+                                        <?php if ($this->session->get('auth')['uid'] == $reply->user->id) { ?>
+                                            <button class="btn btn-link my-2 my-sm-0" ><h6>Edit</h6></button>
                                         <h5>|</h5>
-                                        <?php } ?>
                                         <form class="form-inline" action="<?= $this->url->get('/thread/hide') ?>" method="POST">
-                                            <input type="hidden" name="h_id" value="<?= $rep->id ?>">
+                                            <input type="hidden" name="h_id" value="<?= $reply->id ?>">
                                             <button class="btn btn-link text-danger my-2 my-sm-0" type="submit"><h6>Delete</h6></button>
                                         </form>
+                                        <?php } ?>
                                     </div>
                                     <div class="row">
-                                        <h6>Created at: <?= $reply->created_at ?></h6>
+                                        <h6>Posted at: <?= date('j-M-y', $reply->created_at) ?></h6>
                                     </div>
+                                    <?php if ($reply->updated_at != $reply->created_at) { ?>
                                     <div class="row">
-                                        <h6>Edited at: <?= $reply->updated_at ?></h6>
+                                        <h6>Edited at: <?= date('j-M-y', $reply->updated_at) ?></h6>
                                     </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </th>
@@ -100,7 +115,7 @@
                     <?php } ?>
                 </tbody>
             </table>
-            <?php if ($rt->locked == 0) { ?>
+            <?php if ($root->locked == 0 && isset($this->session->get('auth')['uid'])) { ?> 
             <div class="row">
                 <div class="col">
                     <div class="h4 mb-3">Reply to Thread</div>

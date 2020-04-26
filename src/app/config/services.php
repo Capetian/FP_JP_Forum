@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Phalcon\Escaper;
+use Phalcon\Security;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
@@ -11,7 +12,11 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Session\Adapter\Stream as SessionAdapter;
 use Phalcon\Session\Manager as SessionManager;
 use Phalcon\Url as UrlResolver;
-
+use Phalcon\Dispatcher;
+use Phalcon\Mvc\Dispatcher as MvcDispatcher;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Dispatcher\Exception as DispatchException;
 /**
  * Shared configuration service
  */
@@ -31,6 +36,50 @@ $di->setShared('url', function () {
     return $url;
 });
 
+$di->setShared(
+    'dispatcher',
+    function () {
+        // Create an EventsManager
+        $eventsManager = new EventsManager();
+
+        // Attach a listener
+        $eventsManager->attach(
+            'dispatch:beforeException',
+            function (Event $event, $dispatcher, Exception $exception) {
+                // Handle 404 exceptions
+                if ($exception instanceof DispatchException) {
+                    $dispatcher->forward(
+                        [
+                            'controller' => 'error',
+                            'action'     => 'show404',
+                        ]
+                    );
+
+                    return false;
+                }
+            }
+        );
+
+        $dispatcher = new MvcDispatcher();
+
+        // Bind the EventsManager to the dispatcher
+        $dispatcher->setEventsManager($eventsManager);
+
+        return $dispatcher;
+    }
+);
+
+
+$di->setShared(
+    'security',
+    function () {
+        $security = new Security();
+
+        $security->setWorkFactor(12);
+
+        return $security;
+    }
+);
 /**
  * Setting up the view component
  */
