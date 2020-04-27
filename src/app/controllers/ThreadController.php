@@ -113,7 +113,6 @@ class ThreadController extends ControllerBase
     public function editAction()
     {
         $request = $this->checkCSRF($this->request);
-        $changes = [];
         $content = $request->getPost("content");
         $eid = $request->getPost("e_id");
         $post = Threads::findById($this->toID($eid));

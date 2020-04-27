@@ -4,6 +4,11 @@ $router = $di->getRouter();
 
 
 
+$router->add('/', array(
+    'controller' => 'index',
+    'action' => 'index'
+));
+
 $router->add('/:controller/:action', array(
     'controller' => 1,
     'action' => 'index'
@@ -20,6 +25,14 @@ $router->add('/:controller/:action/:params', array(
     'params' => 3
 ));	
 
+$router->notFound(
+    [
+        'controller' => 'error',
+        'action'     => 'show404',
+    ]
+);
+
+$router->removeExtraSlashes(true);
 // $router->addGet('/register', [
 
 //     'controller' => 'Index',
