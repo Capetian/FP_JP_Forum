@@ -31,7 +31,7 @@
         <div class="row ">
             <div class="col bg-light p-5">
                 <div class="h2 mb-5">Create a Subforum</div>
-                <form action="<?= $this->url->get('/subforum/store') ?>" method="POST">
+                <form action="<?= $this->url->get('/admin/storeSub') ?>" method="POST">
                     <div class="form-group row">
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Subforum Name">

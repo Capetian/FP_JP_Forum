@@ -24,6 +24,9 @@
                 <div class="text-center">
                     <div class="h2 mb-5">Login</div>
                     <form action="<?= $this->url->get('/index/signin') ?>" method="POST">
+                    
+                        <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+                            value='<?php echo $this->security->getToken() ?>'/>
                         <div class="form-group row">
                             <div class="col-md-3 text-right">
                                 <label for="em">Email</label>

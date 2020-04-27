@@ -14,7 +14,7 @@ class UserController extends ControllerBase
 
     public function editAction()
     {
-        $request = $this->request;
+        $request = $this->checkCSRF($this->request);
         $changes = [];
         $uid = $request->getPost("uid");
 

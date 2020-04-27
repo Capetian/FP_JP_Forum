@@ -15,6 +15,8 @@
             <div class="col bg-light p-5">
                 <div class="h2 mb-5">Create a Thread</div>
                 <form action="{{ url('/thread/store') }}" method="POST">
+                    <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+        value='<?php echo $this->security->getToken() ?>'/>
                     <div class="form-group row">
                         <div class="col-md-3">
                             <select name="sid" class="form-control">

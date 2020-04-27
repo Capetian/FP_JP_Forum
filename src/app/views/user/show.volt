@@ -11,8 +11,18 @@
                 <div class="h2 mb-5">{{usr.username}}'s Profile</div>
                 {% endif %}
                 <h4> {{ usr.username }} </h4>
+                {% if usr.role == 0 %}
+                {% set role = "User" %}
+                {% elseif usr.role == 1 %}
+                {% set role = "Moderator" %}
+                {% else %}
+                {% set role = "Admin" %}
+                {% endif %}
+                <h5 class="text-muted"> {{ role }} </h5>
                 {% if  session.get('auth')['uid'] == usr.id  %}
                 <form action="{{ url('/user/edit') }}" method="POST">
+                    <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+        value='<?php echo $this->security->getToken() ?>'/>
                      <input type="hidden" name="uid" value="{{ session.get('auth')['uid'] }}">
                     <div class="form-group row">
                         <div class="col-md-3">

@@ -16,7 +16,10 @@
         <a class="nav-link" href="<?= $this->url->get('/') ?>">Forum</a>
       </li>
     </ul>
-    <form class="form-inline ml-2">
+    <form class="form-inline ml-2"  action="<?= $this->url->get('/index/search/') ?>" method="POST" >
+    
+    <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+        value='<?php echo $this->security->getToken() ?>'/>
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>

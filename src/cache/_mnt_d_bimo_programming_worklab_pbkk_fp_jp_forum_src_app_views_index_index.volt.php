@@ -23,9 +23,9 @@
         <div class="col-md-auto bg-white">
             <div class="text-center">
                 <table class="table table-hover">
-                    <thead class="thead bg-primary text-white text-justify">
+                    <thead class="thead bg-primary text-white text-center">
                         <tr>
-                            <th scope="col" class="th "><h5>Subforums</h5></th>
+                            <th scope="col" class="th text-justify"><h5>Subforums</h5></th>
                             <th scope="col"><h6>Posts</h6></th>
                         </tr>
                     </thead>

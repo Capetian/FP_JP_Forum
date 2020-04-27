@@ -14,7 +14,9 @@
         <div class="row ">
             <div class="col bg-light p-5">
                 <div class="h2 mb-5">Create a Subforum</div>
-                <form action="{{ url('/subforum/store') }}" method="POST">
+                <form action="{{ url('/admin/storeSub') }}" method="POST">
+                    <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+        value='<?php echo $this->security->getToken() ?>'/>
                     <div class="form-group row">
                         <div class="col-md-8">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Subforum Name">

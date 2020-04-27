@@ -28,6 +28,14 @@
                 <div class="h2 mb-5"><?= $usr->username ?>'s Profile</div>
                 <?php } ?>
                 <h4> <?= $usr->username ?> </h4>
+                <?php if ($usr->role == 0) { ?>
+                <?php $role = 'User'; ?>
+                <?php } elseif ($usr->role == 1) { ?>
+                <?php $role = 'Moderator'; ?>
+                <?php } else { ?>
+                <?php $role = 'Admin'; ?>
+                <?php } ?>
+                <h5 class="text-muted"> <?= $role ?> </h5>
                 <?php if ($this->session->get('auth')['uid'] == $usr->id) { ?>
                 <form action="<?= $this->url->get('/user/edit') ?>" method="POST">
                      <input type="hidden" name="uid" value="<?= $this->session->get('auth')['uid'] ?>">

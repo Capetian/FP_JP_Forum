@@ -7,6 +7,9 @@
                 <div class="text-center">
                     <div class="h2 mb-5">Register</div>
                     <form action="{{ url('/index/store') }}" method="POST">
+                    
+                        <input type='hidden' name='<?php echo $this->security->getTokenKey() ?>'
+                            value='<?php echo $this->security->getToken() ?>'/>
                         <div class="form-group row">
                             <div class="col-md-3 text-right">
                                 <label for="username">Username</label>

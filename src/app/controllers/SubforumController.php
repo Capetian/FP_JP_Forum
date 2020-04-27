@@ -7,30 +7,11 @@ class SubforumController extends ControllerBase
 
     public function indexAction()
     {
-        $subforums = $this->toJson(Subforums::get());
+        $subforums = $this->toJson(Subforums::join('threads')->get());
 
         $this->view->subforums = $subforums;
 
         $this->view->pick('subforum/index');
-    }
-
-    public function createAction()
-    {
-        $this->view->pick('subforum/create');  
-    }
-
-    public function storeAction()
-    {
-        $user = Subforums::init();
-        $request = $this->request;
-        $user->fill(
-            [
-                'name' => $request->getPost('name'),
-                'description' => $request->getPost('desc'),
-            ]
-
-        )->save();
-        $this->response->redirect('subforum/index');
     }
 
     public function showAction($param)

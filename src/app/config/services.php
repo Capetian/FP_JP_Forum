@@ -60,6 +60,8 @@ $di->setShared(
             }
         );
 
+
+
         $dispatcher = new MvcDispatcher();
 
         // Bind the EventsManager to the dispatcher

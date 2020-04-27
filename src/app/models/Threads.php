@@ -31,4 +31,8 @@ class Threads extends Model
             Threads::findById($id)->update(["updated_at"=>$this->created_at]);
         }
     }
+    public function beforeUpdate()
+    {
+        $this->updated_at = time();
+    }
 }

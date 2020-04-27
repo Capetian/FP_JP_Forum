@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use Phalcon\Mvc\Controller;
+use Phalcon\HTTP\Request;
+
 
 class ControllerBase extends Controller
 {
@@ -27,5 +29,20 @@ class ControllerBase extends Controller
     public function toID($id)
     {
         return new \MongoDB\BSON\ObjectId($id); 
+    }
+
+    public function checkCSRF(Request $req)
+    {
+        if ($req->isPost()) {
+            if ($this->security->checkToken()) {
+                return $req;
+            }
+        }
+        $this->dispatcher->forward(
+            [
+                'controller' => 'index',
+                'action'     => 'index',
+            ]
+        );
     }
 }

@@ -28,12 +28,13 @@ class IndexController extends ControllerBase
     public function storeAction()
     {
         $user = Users::init();
-        $request = $this->request;
+        $request = $this->checkCSRF($this->request);
         $user->fill(
             [
                 'username' => $request->getPost('username'),
                 'email' => $request->getPost('email',"email"),
                 'password' => $this->security->hash($request->getPost('password',"string")),
+                'role' => 0,
             ]
 
         )->save();
@@ -43,7 +44,7 @@ class IndexController extends ControllerBase
     public function signinAction()
     {
 
-        $request = $this->request;
+        $request = $this->checkCSRF($this->request);
         $email = $request->getPost('em', 'email');
         $pass = $request->getPost('pw',"string");
         $user = Users::findFirst(["email"=> $email])->toArray();
@@ -51,7 +52,7 @@ class IndexController extends ControllerBase
         if($user)
         {
             if($this->security->checkHash($pass, $user['password']) === true){
-                $this->session->set('auth',['username' => $user['username'], 'uid' => $user['id']]);
+                $this->session->set('auth',['username' => $user['username'], 'uid' => $user['id'], 'role' => $user['role']]);
             }
             else{
                 $this->flashSession->error('Password anda salah');
@@ -72,7 +73,7 @@ class IndexController extends ControllerBase
 
     public function searchAction()
     {
-        $request = $this->request;
+        $request = $this->checkCSRF($this->request);
         $results =  $this->toJson(Threads::where("title","%",$request->getPost("search"))->join('user')->get());;
         $this->view->results = $results;
         $this->view->pick('index/search');
